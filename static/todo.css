@@ -1,0 +1,9 @@
+body {background-image: url("wallpaper.jpg") ;}
+.container {background: linear-gradient(#4504f589, #eaf73689);
+     margin-left: auto;
+    margin-right: auto;
+    width: 20em
+}
+#complete {color: rgb(0, 99, 0)}
+#incomplete {color: red}
+a {color: darkred;text-decoration: underline dotted;}
