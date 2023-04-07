@@ -3,14 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy import desc
 
-# first step in starting a flask app
+
 app = Flask(__name__)
 
-# configuring the database
+
 app.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
-# initializing sqlalchemy
+
 db=SQLAlchemy(app)
 
 
@@ -25,16 +25,16 @@ class Note(db.Model):
     
 
 
-# home route
+
 @app.route('/')
 def home():
-    # making the data to render from a descending order according to the datetime
+
     incomplete =Note.query.filter_by(complete=False).order_by(desc(Note.date)).all()
     complete = Note.query.filter_by(complete=True).order_by(desc(Note.date)).all()
 
-    return render_template('home.html', incomplete =incomplete, complete=complete)
+    return render_template('home.html', incomplete=incomplete, complete=complete, delete=delete)
 
-# route for adding todos
+
 @app.route('/add', methods=['POST'])
 def add():
     note = Note(text=request.form['todoitem'], complete=False)
@@ -42,7 +42,7 @@ def add():
     db.session.commit()
     return redirect (url_for('home'))
 
-# route to mark completed task
+
 @app.route('/complete/<id>')
 def complete(id):
     note = Note.query.filter_by(id=int(id)).first()
@@ -50,7 +50,22 @@ def complete(id):
     db.session.commit()
 
     return redirect (url_for('home'))
+    
+@app.route('/incomplete/<id>')
+def incomplete(id):
+    note = Note.query.filter_by(id=int(id)).first()
+    note.complete = False
+    db.session.commit()
 
-# initiating the flask framework
+    return redirect (url_for('home'))
+
+@app.route('/delete/<id>')
+def delete(id):
+    note = Note.query.filter_by(id=int(id)).first()
+    db.session.delete(note)
+    db.session.commit()
+
+    return redirect (url_for('home'))
+
 if __name__ == "__main__":
     app.run(debug=True)

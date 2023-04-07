@@ -13,7 +13,7 @@
     <h1>Trucs a faire</h1>
     <strong>Ajouter un truc a faire</strong>
     <form action="{{ url_for('add') }}" method="POST" >
-            <input class="form-control" required type="text" name="todoitem">
+            <input class="form-control" required type="text" name="todoitem" placeholder="Veuillez rentrer votre tache">
             <input value="Ajouter une tache" type="submit"  >
 
     </form>
@@ -22,7 +22,7 @@
             <div id="incomplete">
             <ul>
                 {% for todo in incomplete %}
-                 <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Fini ?</a> </li>
+                 <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Fini ?</a> <a href="{{ url_for('delete', id=todo.id) }}">Suppression</a></li>
                 {% endfor %}
             </ul>
             </div>
@@ -30,7 +30,8 @@
             <div id="complete">
             <ul>
                 {% for todo in complete %}
-                <li style="font-size: 30pt">{{ todo.text }}</li>
+                <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('incomplete', id=todo.id) }}">Tache a recommencer ? ?</a> <a href="{{ url_for('delete', id=todo.id) }}">Suppression</a></li>
+
                 {% endfor %}
             </ul>
           </div>
