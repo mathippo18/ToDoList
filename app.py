@@ -21,6 +21,7 @@ class Note(db.Model):
     text = db.Column(db.String(100))
     complete =db.Column(db.Boolean())
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    finito = db.Column(db.String(100))
 
     
 
@@ -37,7 +38,7 @@ def home():
 
 @app.route('/add', methods=['POST'])
 def add():
-    note = Note(text=request.form['todoitem'], complete=False)
+    note = Note(text=request.form['todoitem'], complete=False, finito=request.form['DateBut'])
     db.session.add(note)
     db.session.commit()
     return redirect (url_for('home'))
@@ -47,17 +48,20 @@ def add():
 def complete(id):
     note = Note.query.filter_by(id=int(id)).first()
     note.complete = True
+    note.finito = "0000-00-00"
     db.session.commit()
 
     return redirect (url_for('home'))
     
-@app.route('/incomplete/<id>')
+@app.route('/incomplete/<id>', methods=['POST'])
 def incomplete(id):
     note = Note.query.filter_by(id=int(id)).first()
     note.complete = False
+    note.finito = request.form['RecoDateBut']
     db.session.commit()
 
     return redirect (url_for('home'))
+
 
 @app.route('/delete/<id>')
 def delete(id):

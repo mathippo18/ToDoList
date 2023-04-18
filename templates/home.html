@@ -5,8 +5,6 @@
     <title>Liste a faire</title>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='todo.css') }}">
-
-
 </head>
 <body>
 <div class="container">
@@ -14,6 +12,7 @@
     <strong>Ajouter un truc a faire</strong>
     <form action="{{ url_for('add') }}" method="POST" >
             <input class="form-control" required type="text" name="todoitem" placeholder="Veuillez rentrer votre tache">
+            <input class="form-control" required type="date" name="DateBut" placeholder="Rentrez la date butoire">
             <input value="Ajouter une tache" type="submit"  >
 
     </form>
@@ -22,7 +21,7 @@
             <div id="incomplete">
             <ul>
                 {% for todo in incomplete %}
-                 <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Fini ?</a> <a href="{{ url_for('delete', id=todo.id) }}">Suppression</a></li>
+                 <li style="font-size: 30pt">{{ todo.text }} <br> Date butoire : {{ todo.finito }}<a href="{{ url_for('complete', id=todo.id) }}">Fini ?</a><br> <a href="{{ url_for('delete', id=todo.id) }}">Suppression</a></li>
                 {% endfor %}
             </ul>
             </div>
@@ -30,8 +29,11 @@
             <div id="complete">
             <ul>
                 {% for todo in complete %}
-                <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('incomplete', id=todo.id) }}">Tache a recommencer ? ?</a> <a href="{{ url_for('delete', id=todo.id) }}">Suppression</a></li>
-
+                <form action="{{ url_for('incomplete', id=todo.id) }}" method="POST">
+                <li style="font-size: 30pt">{{ todo.text }}     <input class="form-control" required type="date" name="RecoDateBut" placeholder="Rentrez la date butoire"> <input value="Recommencer" type="submit"  >
+                    <br>
+                    <a href="{{ url_for('delete', id=todo.id) }}">Suppression</a></li>
+                </form> 
                 {% endfor %}
             </ul>
           </div>
